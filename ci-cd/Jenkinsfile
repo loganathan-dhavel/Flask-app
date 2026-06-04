@@ -13,10 +13,18 @@ pipeline {
             }
         }
 
+        stage('Check dirs') {
+            steps {
+                script {
+                   sh """ls -lrth"""
+                }
+            }
+        }
+
         stage('Build docker image') {
             steps {
                 script {
-                   sh """docker build -t $IMAGE_NAME:$IMAGE_TAG -f docker/Dockerfile."""
+                   sh """docker build -t $IMAGE_NAME:$IMAGE_TAG -f ./docker/Dockerfile ."""
                 }
             }
         }
