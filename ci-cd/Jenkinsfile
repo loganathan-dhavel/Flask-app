@@ -9,7 +9,7 @@ pipeline {
     stages {
         stage('checkout scm') {
             steps {
-                checkout scm
+               git branch: 'master', url: 'https://github.com/loganathan-dhavel/Flask-app.git'
             }
         }
 
