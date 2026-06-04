@@ -9,9 +9,7 @@ pipeline {
     stages {
         stage('checkout scm') {
             steps {
-                script {
-                    git branch: 'master' url: 'https://github.com/loganathan-dhavel/Flask-app.git'
-                }
+                def scmVars = checkout scm
             }
         }
 
