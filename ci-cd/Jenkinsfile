@@ -1,0 +1,40 @@
+pipeline {
+    agent any
+    environment {
+        REGISTRY = "docker.io"
+        IMAGE_NAME = "krishloga9318/flask-pg-backend"
+        IMAGE_TAG = "latest"
+    }
+
+    stages {
+        stage('checkout scm') {
+            steps {
+                script {
+                    git branch: 'master' url: 'https://github.com/loganathan-dhavel/Flask-app.git'
+                }
+            }
+        }
+
+        stage('Build docker image') {
+            steps {
+                script {
+                   sh """docker build -t $IMAGE_NAME:$IMAGE_TAG -f docker/Dockerfile."""
+                }
+            }
+        }
+
+        stage('Push to docker registry') {
+            steps {
+                script {
+                    withCredentials([usernamePassword(credentialsId: 'fd73e25c-f15d-40b3-ab34-f1172a3569f2
+', usernameVariable: 'Username', passwordVariable: 'Password')]) {
+                        sh """
+                        echo $PASS | docker login -u $USER --password-stdin $REGISTRY
+                        docker push $IMAGE_NAME:$IMAGE_TAG
+                        """
+                    }
+                }
+            }
+        }
+    }
+}
