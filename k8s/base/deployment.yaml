@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: flask-pg-backend-deployment
+  namespace: prod
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: flask-pg-backend
+  template:
+    metadata:
+      labels:
+        app: flask-pg-backend
+    spec:
+      containers:
+        - name: flask-pg-backend
+          image: krishloga9318/flask-pg-backend:latest
+          ports:
+            - containerPort: 5000
+          resources:
+            requests:
+              cpu: "250m"
+              memory: "2Gi"
+            limits:
+              cpu: "500m"
+              memory: "3Gi"

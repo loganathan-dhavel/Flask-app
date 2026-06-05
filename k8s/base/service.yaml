@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: flask-pg-backend-service
+  namespace: prod
+spec:
+  selector: 
+    app: flask-pg-backend
+  type: NodePort
+  ports:
+    - protocol: TCP
+      port: 5000
+      targetPort: 5000
+      nodePort: 30001
