@@ -37,6 +37,16 @@ def db_get_users(app,user_id):
         app.logger.error(f"Error connecting to database: {e}")
         return None
 
+def db_get_all_users(app):
+    try:
+        response = supabase.table('users').select("*").execute()
+        users = response.data
+        app.logger.info(f"Connected to Database {users}")
+        return users
+    except Exception as e:
+        app.logger.error(f"Error connecting to database: {e}")
+        return None
+
 def db_create_user(app,username,email):
     try:
         user = supabase.table('users').insert({'username': username, 'email': email}).execute()

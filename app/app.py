@@ -36,8 +36,13 @@ def get_health():
     return jsonify(status)
 
 @app.route('/api/v1/get/user/<user_id>',methods=['GET'])
-def get_db_connection(user_id):
+def get_users_by_id(user_id):
     users = db_get_users(app,user_id)
+    return jsonify({'users': users})
+
+@app.route('/api/v1/get/users',methods=['GET'])
+def get_all_users():
+    users = db_get_all_users(app)
     return jsonify({'users': users})
 
 @app.route('/api/v1/create/user',methods=['POST'])
