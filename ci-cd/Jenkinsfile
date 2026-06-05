@@ -32,7 +32,7 @@ pipeline {
         stage('Push to docker registry') {
             steps {
                 script {
-                    withCredentials([usernamePassword(credentialsId: 'fd73e25c-f15d-40b3-ab34-f1172a3569f2', usernameVariable: 'Username', passwordVariable: 'Password')]) {
+                    withCredentials([usernamePassword(credentialsId: '7c0bd38b-5596-4f57-9081-5de2162f2550', usernameVariable: 'Username', passwordVariable: 'Password')]) {
                         sh """
                         echo $PASS | docker login -u $USER --password-stdin $REGISTRY
                         docker push $IMAGE_NAME:$IMAGE_TAG
