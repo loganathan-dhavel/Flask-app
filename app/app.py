@@ -43,6 +43,7 @@ def get_users_by_id(user_id):
 @app.route('/api/v1/get/users',methods=['GET'])
 def get_all_users():
     users = db_get_all_users(app)
+    app.logger.info(f"Fetched users: {users}")
     return jsonify({'users': users})
 
 @app.route('/api/v1/create/user',methods=['POST'])
