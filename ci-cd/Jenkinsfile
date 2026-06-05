@@ -33,7 +33,10 @@ pipeline {
             steps {
                 script {
                     withCredentials([usernamePassword(credentialsId: 'dockerhub-creds', usernameVariable: 'USER', passwordVariable: 'PASS')]) {
-                        sh """echo $PASS | docker login -u $USER --password-stdin $REGISTRY docker push $IMAGE_NAME:$IMAGE_TAG"""
+                        sh """
+                        echo $PASS | docker login -u $USER --password-stdin $REGISTRY 
+                        docker push $IMAGE_NAME:$IMAGE_TAG
+                        """
                     }
                 }
             }
