@@ -4,6 +4,8 @@ pipeline {
         REGISTRY = "docker.io"
         IMAGE_NAME = "krishloga9318/flask-pg-backend"
         IMAGE_TAG = "latest"
+        K8S_REPO = 'https://gitlab.com/loganathan-dhavel/flask-pg-backend-argocd.git'
+        K8S_BRANCH = "main"
     }
 
     stages {
@@ -15,30 +17,37 @@ pipeline {
 
         stage('Check dirs') {
             steps {
-                script {
-                   sh """ls -lrth"""
-                }
+                sh "ls -lrth"
             }
         }
 
         stage('Build docker image') {
             steps {
-                script {
-                   sh """docker build -t $IMAGE_NAME:$IMAGE_TAG -f ./docker/Dockerfile ."""
-                }
+                sh "docker build -t $IMAGE_NAME:$IMAGE_TAG -f ./docker/Dockerfile ."
             }
         }
 
         stage('Push to docker registry') {
             steps {
-                script {
-                    withCredentials([usernamePassword(credentialsId: 'dockerhub-creds', usernameVariable: 'USER', passwordVariable: 'PASS')]) {
-                        sh """
-                        echo $PASS | docker login -u $USER --password-stdin $REGISTRY 
-                        docker push $IMAGE_NAME:$IMAGE_TAG
-                        """
-                    }
+                withCredentials([usernamePassword(credentialsId: 'dockerhub-creds', usernameVariable: 'USER', passwordVariable: 'PASS')]) {
+                    sh """
+                    echo $PASS | docker login -u $USER --password-stdin $REGISTRY
+                    docker push $IMAGE_NAME:$IMAGE_TAG
+                    """
                 }
+            }
+        }
+
+        stage('Push K8s Manifests to GitLab') {
+            steps {
+                    sh """
+                    mkdir k8s-repo
+                    cp -r ./k8s/* k8s-repo/
+                    cd k8s-repo
+                    git add .
+                    git commit -m "Update manifests for image $IMAGE_NAME:$IMAGE_TAG"
+                    git push origin $K8S_BRANCH
+                    """
             }
         }
     }
