@@ -45,6 +45,8 @@ pipeline {
                     git clone $K8S_REPO k8s-repo
                     cp -r ./k8s/* k8s-repo/
                     cd k8s-repo
+                    git config user.email "loganathan9318@gmail.com"
+                    git config user.name "Jenkins_CI"
                     git add .
                     git commit -m "Update manifests for image $IMAGE_NAME:$IMAGE_TAG"
                     git push origin $K8S_BRANCH
