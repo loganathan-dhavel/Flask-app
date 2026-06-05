@@ -18,6 +18,9 @@ spec:
           image: krishloga9318/flask-pg-backend:latest
           ports:
             - containerPort: 5000
+          envFrom:
+            - configMapRef:
+                name: flask-pg-backend-config
           resources:
             requests:
               cpu: "250m"
