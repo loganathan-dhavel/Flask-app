@@ -40,9 +40,10 @@ pipeline {
 
         stage('Push K8s Manifests to GitLab') {
             steps {
+                withCredentials([string(credentialsId: 'gitlab-token', variable: 'GIT_TOKEN')]) {
                     sh """
                     rm -rf k8s-repo
-                    git clone $K8S_REPO k8s-repo
+                    git clone https://oauth2:$GIT_TOKEN@gitlab.com/loganathan-dhavel/flask-pg-backend-argocd.git k8s-repo
                     cp -r ./k8s/* k8s-repo/
                     cd k8s-repo
                     git config user.email "loganathan9318@gmail.com"
@@ -51,6 +52,7 @@ pipeline {
                     git commit -m "Update manifests for image $IMAGE_NAME:$IMAGE_TAG"
                     git push origin $K8S_BRANCH
                     """
+                }
             }
         }
     }
