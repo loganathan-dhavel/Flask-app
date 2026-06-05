@@ -42,6 +42,7 @@ pipeline {
             steps {
                     sh """
                     mkdir k8s-repo
+                    git clone $K8S_REPO k8s-repo
                     cp -r ./k8s/* k8s-repo/
                     cd k8s-repo
                     git add .
